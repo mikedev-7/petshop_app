@@ -27,8 +27,11 @@ const pets = [
 ];
 
 const Pets = () => {
-  const [petDetails, setPetDetails] = useState(pets[10]); // Initial pet details
-  const [petIndex, setPetIndex] = useState(10); // Initial pet index
+  const initialPetIndex = 10;
+  const initialPet = pets[initialPetIndex] || pets[0]; // Default to the first pet if index 10 doesn't exist
+
+  const [petDetails, setPetDetails] = useState(initialPet); // Initial pet details
+  const [petIndex, setPetIndex] = useState(pets.indexOf(initialPet)); // Initial pet index
 
   // Function to get details of clicked pet
   const getPetDetails = (id) => {
@@ -52,14 +55,20 @@ const Pets = () => {
           {/* Pet details */}
           <div className='lg:w-[30%] flex flex-col justify-center items-end pb-6 lg:py-2 mx-auto lg:mx-0'>
             <div className='text-center text-white'>
-              {/* Category */}
-              <div className='text-[32px] capitalize'>{petDetails.category}</div>
-              {/* Name */}
-              <div className='uppercase text-[17px] mb-1'>({petDetails.name})</div>
-              {/* Image */}
-              <div className='w-[150px] h-[150px] mx-auto lg:mx-0 border-4 border-white rounded-full'>
-                <Image src={petDetails.image} width={150} height={150} alt='Pet' />
-              </div>
+              {petDetails ? (
+                <>
+                  {/* Category */}
+                  <div className='text-[32px] capitalize'>{petDetails.category}</div>
+                  {/* Name */}
+                  <div className='uppercase text-[17px] mb-1'>({petDetails.name})</div>
+                  {/* Image */}
+                  <div className='w-[150px] h-[150px] mx-auto lg:mx-0 border-4 border-white rounded-full'>
+                    <Image src={petDetails.image} width={150} height={150} alt='Pet' />
+                  </div>
+                </>
+              ) : (
+                <div className='text-[32px] capitalize'>No pet details available</div>
+              )}
             </div>
           </div>
 
@@ -73,7 +82,7 @@ const Pets = () => {
                   onClick={() => {
                     getPetDetails(pet.id);
                   }}
-                  className= {`cursor-pointer relative ${petIndex === index ? 'border-2 border-white' : 'bg-black/40'}`}
+                  className={`cursor-pointer relative ${petIndex === index ? 'border-2 border-white' : 'bg-black/40'}`}
                 >
                   {/* Overlay */}
                   <div className='w-full h-full absolute rounded-full'></div>
